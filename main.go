@@ -1,31 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/chi/v5"
+	"github.com/chtiwa/go_microservices/application"
 )
 
 func main() {
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
-	router.Get("/", basicHandler)
-	// saving it as a pointer and taking the memory address
-	server := &http.Server{
-		Addr:    ":8000",
-		Handler: router,
-	}
+	app := application.New()
 
-	err := server.ListenAndServe()
+	err := app.Start(context.TODO())
+
 	if err != nil {
-		fmt.Println("Failed to listen to server", err)
+		fmt.Println("failmed to start app")
 	}
-
-}
-
-// r is a pointer of http.Request
-func basicHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello world!"))
 }
